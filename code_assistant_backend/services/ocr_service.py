@@ -72,9 +72,11 @@ def extract_text_from_image(image_path):
         
         # Perform OCR on the image
         text = pytesseract.image_to_string(img)
+        print(text)
+        text2 = 'what is python?'
         logging.info("Text extraction completed.")
         
-        return get_model_output(hugging_face_token, text)
+        return get_model_output(hugging_face_token, text2)
 
     except Exception as e:
         logging.error(f"An error occurred during text extraction: {str(e)}")
