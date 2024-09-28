@@ -76,7 +76,8 @@ def extract_text_from_image(image_path):
         text2 = 'what is python?'
         logging.info("Text extraction completed.")
         
-        return get_model_output(hugging_face_token, text2)
+        # return get_model_output(hugging_face_token, text2)
+        return get_mocked_model_output(text2)
 
     except Exception as e:
         logging.error(f"An error occurred during text extraction: {str(e)}")
@@ -123,6 +124,29 @@ def get_model_output(token, prompt):
         return None
 
     
+    
+def get_mocked_model_output(prompt):
+    """
+    Mocks the model output to simulate the behavior of an AI model.
+    
+    :param prompt: str - The prompt to simulate.
+    :return: str - The mocked output for the provided prompt.
+    """
+    logging.info(f"Received prompt: {prompt}")
+
+    # Mocked responses based on the prompt
+    mocked_responses = {
+        'what is python?': "Python is a high-level, interpreted programming language known for its ease of use and readability. It's widely used in web development, data science, automation, and more.",
+        'what is machine learning?': "Machine learning is a field of artificial intelligence that focuses on building algorithms that learn patterns from data and make decisions with minimal human intervention.",
+        'who is the president of the US?': "As of now, the President of the United States is Joe Biden (assuming this is up-to-date).",
+        # Add more mocked responses as needed
+    }
+
+    # Return the mocked response or a default one
+    response = mocked_responses.get(prompt.lower(), "I'm sorry, I don't have a mock response for that prompt.")
+    logging.info(f"Returning mocked response: {response}")
+
+    return response
     
 
 # def get_model_output(model_name, token, question):
