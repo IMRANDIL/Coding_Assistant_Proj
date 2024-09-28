@@ -1,17 +1,20 @@
 // src/components/CodeBlock.tsx
 import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism'; // You can choose other styles if you'd like
 
 interface CodeBlockProps {
   text: string;
+  language: string;  // Add a language prop to dynamically specify the code language
 }
 
-const CodeBlock: React.FC<CodeBlockProps> = ({ text }) => {
+const CodeBlock: React.FC<CodeBlockProps> = ({ text, language }) => {
   return (
     <div style={styles.container}>
-      <pre style={styles.pre}>
-        <code style={styles.code}>{text}</code>
-      </pre>
+      <SyntaxHighlighter language={language} style={darcula}>
+        {text}
+      </SyntaxHighlighter>
       <CopyToClipboard text={text}>
         <button style={styles.copyButton} onClick={() => alert('Code copied!')}>
           Copy code
@@ -28,15 +31,7 @@ const styles = {
     borderRadius: '8px',
     padding: '16px',
     overflow: 'auto',
-  },
-  pre: {
-    margin: 0,
-    fontFamily: 'monospace',
-    color: '#f8f8f2',
-    whiteSpace: 'pre-wrap' as 'pre-wrap',
-  },
-  code: {
-    fontSize: '14px',
+    marginTop: '10px'
   },
   copyButton: {
     position: 'absolute' as 'absolute',
