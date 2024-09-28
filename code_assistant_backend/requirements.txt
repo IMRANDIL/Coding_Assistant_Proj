@@ -3,5 +3,6 @@ easyocr
 requests
 pytesseract 
 Pillow
+huggingface_hub
 
 
