@@ -1,5 +1,8 @@
 # Code Assistant - OCR with Model Query
 
+![Screenshot 2024-10-07 050945](https://github.com/user-attachments/assets/12eb0b31-ad29-40b4-8063-e83a910d8f3e)
+
+
 ## Overview
 
 The **Code Assistant** project is a web application designed to extract code snippets from images using Optical Character Recognition (OCR) technology. It utilizes a combination of EasyOCR, Tesseract, and Flask to provide a seamless user experience for developers looking to capture and manage code snippets efficiently.
