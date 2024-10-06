@@ -37,23 +37,19 @@ hugging_face_token = os.getenv('HUGGING_FACE_TOKEN')
 # # # output = query("cats.jpg")
 
 
-
 import os
 import logging
+import requests  # Missing import for making HTTP requests
 from PIL import Image
 import pytesseract
-from huggingface_hub import InferenceClient
 
 # Constants
-# Constants
 MODEL_NAME = "codellama"  # Use 'codellama' for the model name
-OLLAMA_API_URL = "http://localhost:11434/api/v1/generate"  # Ollama's local API URL
+OLLAMA_API_URL = "http://localhost:11434/api/generate"  # Correct API URL
 
 # Setting up logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Hugging Face token from environment variables
-hugging_face_token = os.getenv('HUGGING_FACE_TOKEN')
 
 def extract_text_from_image(image_path):
     """
@@ -73,17 +69,42 @@ def extract_text_from_image(image_path):
         logging.info(f"Image {image_path} loaded successfully.")
         
         # Perform OCR on the image
-        text = pytesseract.image_to_string(img)
-        # print(text)
-        text2 = 'what is python?'
+        extracted_text = pytesseract.image_to_string(img)
         logging.info("Text extraction completed.")
         
-        return get_model_output(text)
-        # return get_mocked_model_output(text2)
+        # Add extracted text to the prompt template
+        prompt = generate_prompt_template(extracted_text)
+        
+        return get_model_output(prompt)
 
     except Exception as e:
         logging.error(f"An error occurred during text extraction: {str(e)}")
         return None
+
+
+def generate_prompt_template(extracted_text):
+    """
+    Generates a prompt template by adding the extracted text to a programming expert explanation prompt.
+    
+    :param extracted_text: str - The text extracted from the image.
+    :return: str - A detailed prompt with explanations and examples.
+    """
+    prompt_template = f"""
+    You are an expert programming instructor with in-depth knowledge of most programming concepts and their nuances.
+    Please help the user understand the following code or text by explaining it line by line, using simple terms and clear examples.
+
+    Here is the extracted text:
+
+    {extracted_text}
+
+    For each line, provide:
+    1. A brief explanation of what it does.
+    2. A simple example or analogy to clarify the concept.
+    3. If possible, show how it relates to real-world scenarios or common programming tasks.
+    """
+
+    logging.info("Prompt template generated successfully.")
+    return prompt_template
 
 
 def get_model_output(prompt):
@@ -99,19 +120,23 @@ def get_model_output(prompt):
         return None
 
     try:
-        # Construct the API request payload for Code Llama
+        # Construct the API request payload for Code Llama with stream set to false
         payload = {
             "model": MODEL_NAME,
             "prompt": prompt,
-            "max_tokens": 500
+            "max_tokens": 500,
+            "stream": False  # Disable streaming
         }
 
-        # Send a POST request to Ollama's local API
-        response = requests.post(OLLAMA_API_URL, json=payload)
+        # Send a POST request to the API
+        response = requests.post(OLLAMA_API_URL, json=payload, headers={"Content-Type": "application/json"})
+        
+        # Log the response for debugging
+        logging.info(f"Response status code: {response.status_code}")
         
         # Check if the request was successful
         if response.status_code == 200:
-            result = response.json().get("text", "")
+            result = response.json().get("response", "")
             logging.info("Model output generation completed successfully.")
             return result
         else:
@@ -121,8 +146,11 @@ def get_model_output(prompt):
     except Exception as e:
         logging.error(f"An error occurred while querying the model: {str(e)}")
         return None
-    
-    
+
+# Example usage:
+# extract_text_from_image("/path/to/your/image.png")
+
+  
 def get_mocked_model_output(prompt):
     """
     Mocks the model output to simulate the behavior of an AI model.
