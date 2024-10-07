@@ -122,7 +122,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [EasyOCR](https://github.com/JaidedAI/EasyOCR) for optical character recognition.
 - [Tesseract](https://github.com/tesseract-ocr/tesseract) for OCR capabilities.
 - [Flask](https://flask.palletsprojects.com/) for the web framework.
-- [Hugging Face](https://huggingface.co/) for model hosting and API.
+- Codellama with ollama local setup.
 
 ---
 
