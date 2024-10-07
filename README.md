@@ -20,7 +20,7 @@ The **Code Assistant** project is a web application designed to extract code sni
 - **OCR Libraries:** EasyOCR, Tesseract
 - **Frontend:** React
 - **Styling:** Tailwind CSS (or custom CSS)
-- **APIs:** Hugging Face Hub for additional model capabilities
+- **APIs:** with Ollama local setup(codellama)
 
 ## Installation
 
